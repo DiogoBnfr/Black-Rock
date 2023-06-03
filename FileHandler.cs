@@ -2,14 +2,9 @@ namespace BlackRock;
 
 public static class FileHandler
 {
-    public static void CreateRoot()
+    public static void Scan(string directory = "")
     {
-        Directory.CreateDirectory(Environment.CurrentDirectory + @"\BlackRock");
-    }
-
-    public static void ScanRoot()
-    {
-        string[] files = Directory.GetFiles(Environment.CurrentDirectory);
+        string[] files = Directory.GetFiles(Environment.CurrentDirectory + @"\" + directory);
         if (files.Length == 0)
         { Console.WriteLine(); Interface.Center("You don't have any bunkers yet.", ' '); Console.WriteLine(); }
         foreach (string file in files) Console.WriteLine(file);
@@ -17,7 +12,7 @@ public static class FileHandler
     
     public static void CreateBunker()
     {
-               
+        
     }
 
     public static void DeleteBunker()
