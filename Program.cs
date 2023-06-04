@@ -4,25 +4,14 @@ internal static class Program
 {
     public static void Main(string[] args)
     {
-        int inputInt = 0; 
         Pages.DisplayLogo();
         Setup();
 
         while (true)
         {
-            switch (inputInt)
-            {
-                case 0:
-                    Pages.BunkerManager();
-                    break;
-                case 1:
-                    Pages.DepositManager();
-                    break;
-                case 2:
-                    Pages.NoteManager();
-                    break;
-            }   
+            Pages.BunkerManager();
         }
+        // ReSharper disable once FunctionNeverReturns
     }
 
     private static void Setup()

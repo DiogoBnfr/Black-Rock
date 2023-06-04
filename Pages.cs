@@ -1,5 +1,4 @@
 using Console = System.Console;
-using System.Runtime.InteropServices;
 
 namespace BlackRock;
 
@@ -12,32 +11,53 @@ public static class Pages
             if (i == (Console.WindowHeight / 2) - 2) Interface.Center("B L A C K : R O C K", ' ');
             else Console.WriteLine();
         }
-        Console.Write("Loading".PadLeft(Console.WindowWidth - 6, ' '));
-        Console.Write(" ."); Thread.Sleep(1000);
-        Console.Write(" ."); Thread.Sleep(1000);
-        Console.Write(" ."); Thread.Sleep(1000);
+        Thread.Sleep(1000);
         Console.Clear();
     }
     
     public static int BunkerManager()
     {
-        int inputInt;
         while (true)
         {
+            Console.Clear();
             Interface.Center("B U N K E R : M A N A G E R", ':');
             FileHandler.Scan();
-            Interface.Center("| 1 : Open bunker | 2 : Create bunker | 3 : Delete bunker |", ':');
+            Interface.Center("| 1 : Open bunker | 2 : Create bunker | 3 : Delete bunker | 4 : Exit |", ':');
             
-            int[] options = { 1, 2, 3 };
-            inputInt = Interface.Prompt(options);
-            if (inputInt != -1) break; 
+            int[] options = { 1, 2, 3, 4 };
+            int inputInt = Interface.IntPrompt(options);
+            if (inputInt == 2) CreateBunker();
+            if (inputInt == 3) DeleteBunker();
         }
-        return inputInt;
     }
 
-    public static void CreateBunker()
+    private static void CreateBunker()
     {
-        
+        while (true)
+        {
+            Interface.Center("C R E A T E : B U N K E R", ':');
+            Console.Write("Name: ");
+            string directory = Console.ReadLine()!;
+
+            if (Directory.Exists(Environment.CurrentDirectory + @"\" + directory))
+            {
+                Interface.Error("The current bunker already exists!");
+            }
+            else FileHandler.CreateDirectory(directory); break;
+        }
+        Console.Clear();
+    }
+
+    private static void DeleteBunker()
+    {
+        while (true)
+        {
+            Interface.Center("D E L E T E : B U N K E R", ':');
+            Console.Write("Insert the name of the bunker you want to delete: ");
+            string directory = Console.ReadLine()!;
+            
+            FileHandler.DeleteDirectory(directory); break;
+        }
     }
 
     public static void DepositManager()
@@ -64,7 +84,7 @@ public static class Interface
         Console.WriteLine();
     }
 
-    public static int Prompt(int[] options)
+    public static int IntPrompt(int[] options)
     {
         Console.Write("Insert an option: ");
         try
@@ -77,11 +97,10 @@ public static class Interface
         catch (FormatException) { Error("Invalid type! Please insert an integer."); }
         catch (ArgumentOutOfRangeException) { Error("Invalid input! Please insert an existent option."); }
         catch (OverflowException) { Error("Invalid input! ..."); }
-        
         return -1;
     }
 
-    private static void Error(string exception)
+    public static void Error(string exception)
     {
         Console.Clear(); Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine(); Interface.Center(exception, ' '); Console.WriteLine();
