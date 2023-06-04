@@ -2,18 +2,21 @@ namespace BlackRock;
 
 public static class FileHandler
 {
-    private const int Delay = 1000;
-    
     public static void OpenDirectory(string directory = "")
     {
         Environment.CurrentDirectory = Environment.CurrentDirectory + @"\" + directory;
         string[] files = Directory.GetFileSystemEntries(Environment.CurrentDirectory);
-        
+
+        string root = Program.Root();
         if (files.Length == 0)
         {
-            Console.WriteLine(); Interface.Center("You don't have any bunkers yet."); Console.WriteLine();
+            Console.WriteLine();
+            Interface.Center(Environment.CurrentDirectory == root 
+                ? "You don't have any bunkers yet." 
+                : "You don't have any files yet.");
+            Console.WriteLine();
         }
-
+        
         int initialIndex = Environment.CurrentDirectory.Length + 1;
           
         foreach (string file in files)
@@ -21,18 +24,13 @@ public static class FileHandler
             Console.WriteLine(file[(initialIndex)..]);
         }
     }
-    
+
     public static void CreateDirectory(string directory)
     {
         try
         {
             Directory.CreateDirectory(Environment.CurrentDirectory + @"\" + directory);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine();
-            Interface.Center("Bunker created!");
-            Console.WriteLine();
-            Thread.Sleep(Delay);
-            Console.ResetColor();
+            Interface.Success("Bunker created!");
         }
         catch (UnauthorizedAccessException)
         {
@@ -57,12 +55,7 @@ public static class FileHandler
         try
         {
             Directory.Delete(Environment.CurrentDirectory + @"\" + directory);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine();
-            Interface.Center("Bunker deleted!");
-            Console.WriteLine();
-            Thread.Sleep(Delay);
-            Console.ResetColor();
+            Interface.Success("Bunker deleted!");
         }
         catch (DirectoryNotFoundException)
         {
@@ -91,12 +84,7 @@ public static class FileHandler
         try
         {
             File.Create(filePath);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine();
-            Interface.Center("File created!");
-            Console.WriteLine();
-            Thread.Sleep(Delay);
-            Console.ResetColor();
+            Interface.Success("File created!");
         }
         catch (IOException)
         {
@@ -106,6 +94,16 @@ public static class FileHandler
     
     public static void DeleteFile(string fileName)
     {
-        
+        string filePath = Environment.CurrentDirectory + fileName;
+
+        if (File.Exists(filePath))
+        {
+           File.Delete(filePath); 
+           Interface.Success("File deleted!");
+        }
+        else
+        {
+            Interface.Error("The file you're trying to delete doesn't exist!");
+        }
     }
 }

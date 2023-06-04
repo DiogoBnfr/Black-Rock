@@ -28,9 +28,20 @@ public static class Pages
             int[] options = { 1, 2, 3, 4 };
             int inputInt = Interface.IntPrompt(options);
             // ReSharper disable once ConvertIfStatementToSwitchStatement
-            if (inputInt == 1) OpenBunker();
+            if (inputInt == 1)
+            {
+                try
+                {
+                    OpenBunker();
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    Interface.Error("Directory you're trying to open doesn't exist!");
+                }
+            }
             if (inputInt == 2) CreateBunker();
             if (inputInt == 3) DeleteBunker();
+            // ReSharper disable once InvertIf
             if (inputInt == 4) { DisplayLogo(); break; }
         }
     }
@@ -38,7 +49,7 @@ public static class Pages
     private static void OpenBunker()
     {
         Interface.Center("O P E N : B U N K E R", ':');
-        Console.Write("Insert the name of the bunker you want to open: ");
+        Console.Write("Bunker name: ");
         string directory = Console.ReadLine()!;
         
         FileManager(directory);
@@ -73,7 +84,7 @@ public static class Pages
         }
     }
 
-    private static int FileManager(string directory)
+    private static void FileManager(string directory)
     {
         bool run = true;
         while (true)
@@ -90,7 +101,8 @@ public static class Pages
             if (inputInt == 1) OpenFile();
             if (inputInt == 2) CreateFile();
             if (inputInt == 3) DeleteFile();
-            if (inputInt == 4) { Environment.CurrentDirectory = Program.Root(); return 0; }
+            // ReSharper disable once InvertIf
+            if (inputInt == 4) { Environment.CurrentDirectory = Program.Root(); break; }
         }
     }
 
@@ -101,7 +113,6 @@ public static class Pages
 
     private static void CreateFile()
     {
-        Console.Clear();
         Interface.Center("C R E A T E : F I L E", ':');
         Console.Write("File name: ");
         string fileName = Console.ReadLine()!;
@@ -113,7 +124,11 @@ public static class Pages
 
     private static void DeleteFile()
     {
+        Interface.Center("D E L E T E : F I L E", ':');
+        Console.Write("File name: ");
+        string fileName = Console.ReadLine()!;
         
+        FileHandler.DeleteFile(@"\" + fileName);
     }
 }
 
@@ -159,9 +174,22 @@ public static class Interface
 
     public static void Error(string exception)
     {
-        Console.Clear(); Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine(); Interface.Center(exception, ' '); Console.WriteLine();
+        Console.Clear(); 
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine(); 
+        Center(exception, ' '); 
+        Console.WriteLine();
         Thread.Sleep(1000);
         Console.ResetColor(); Console.Clear();
+    }
+
+    public static void Success(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine();
+        Center(message);
+        Console.WriteLine();
+        Thread.Sleep(1000);
+        Console.ResetColor();
     }
 }
