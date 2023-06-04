@@ -6,9 +6,10 @@ public static class Pages
 {
     public static void DisplayLogo()
     {
+        Console.Clear();
         for (int i = 0; i < Console.WindowHeight - 1; i++)
         {
-            if (i == (Console.WindowHeight / 2) - 2) Interface.Center("B L A C K : R O C K", ' ');
+            if (i == (Console.WindowHeight / 2) - 2) Interface.Center("B L A C K : R O C K");
             else Console.WriteLine();
         }
         Thread.Sleep(1000);
@@ -21,14 +22,26 @@ public static class Pages
         {
             Console.Clear();
             Interface.Center("B U N K E R : M A N A G E R", ':');
-            FileHandler.Scan();
+            FileHandler.OpenDirectory();
             Interface.Center("| 1 : Open bunker | 2 : Create bunker | 3 : Delete bunker | 4 : Exit |", ':');
             
             int[] options = { 1, 2, 3, 4 };
             int inputInt = Interface.IntPrompt(options);
+            // ReSharper disable once ConvertIfStatementToSwitchStatement
+            if (inputInt == 1) OpenBunker();
             if (inputInt == 2) CreateBunker();
             if (inputInt == 3) DeleteBunker();
+            if (inputInt == 4) DisplayLogo(); return 0;
         }
+    }
+
+    private static void OpenBunker()
+    {
+        Interface.Center("O P E N : B U N K E R", ':');
+        Console.Write("Insert the name of the bunker you want to open: ");
+        string directory = Console.ReadLine()!;
+        
+        FileManager(directory);
     }
 
     private static void CreateBunker()
@@ -60,12 +73,36 @@ public static class Pages
         }
     }
 
-    public static void DepositManager()
+    private static int FileManager(string directory)
+    {
+        while (true)
+        {
+            Console.Clear();
+            Interface.Center("F I L E : M A N A G E R", ':');
+            FileHandler.OpenDirectory(directory);
+            Interface.Center("| 1 : Open file | 2 : Create file | 3 : Delete file | 4 : Exit |", ':');
+
+            int[] options = { 1, 2, 3, 4 };
+            int inputInt = Interface.IntPrompt(options);
+            // ReSharper disable once ConvertIfStatementToSwitchStatement
+            if (inputInt == 1) OpenFile();
+            if (inputInt == 2) CreateFile();
+            if (inputInt == 3) DeleteFile();
+            if (inputInt == 4) return 0;
+        }
+    }
+
+    private static void OpenFile()
     {
         
     }
 
-    public static void NoteManager()
+    private static void CreateFile()
+    {
+        
+    }
+
+    private static void DeleteFile()
     {
         
     }
@@ -73,7 +110,7 @@ public static class Pages
 
 public static class Interface
 {
-    public static void Center(string text, char symbol)
+    public static void Center(string text, char symbol = ' ')
     {
         int padding = Console.WindowWidth / 2 - text.Length / 2 - 2;
         
@@ -84,6 +121,7 @@ public static class Interface
         Console.WriteLine();
     }
 
+    // ReSharper disable once ParameterTypeCanBeEnumerable.Global
     public static int IntPrompt(int[] options)
     {
         Console.Write("Insert an option: ");

@@ -4,9 +4,7 @@ internal static class Program
 {
     public static void Main(string[] args)
     {
-        Pages.DisplayLogo();
-        Setup();
-
+        Pages.DisplayLogo(); Setup();
         while (true)
         {
             Pages.BunkerManager();

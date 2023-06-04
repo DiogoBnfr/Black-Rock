@@ -4,18 +4,20 @@ public static class FileHandler
 {
     private const int Delay = 1000;
     
-    public static void Scan(string directory = "")
+    public static void OpenDirectory(string directory = "")
     {
-        string[] files = Directory.GetDirectories(Environment.CurrentDirectory + @"\" + directory);
-        
+        string[] files = Directory.GetFileSystemEntries(Environment.CurrentDirectory + @"\" + directory);
+                   
         if (files.Length == 0)
         {
             Console.WriteLine(); Interface.Center("You don't have any bunkers yet.", ' '); Console.WriteLine();
         }
-        
+
+        int initialIndex = Environment.CurrentDirectory.Length + 1;
+        if (directory != "") initialIndex += directory.Length + 1;  
         foreach (string file in files)
         {
-            Console.WriteLine(file[(Environment.CurrentDirectory.Length + 1)..]);
+            Console.WriteLine(file[(initialIndex)..]);
         }
     }
     
