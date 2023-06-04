@@ -16,7 +16,7 @@ public static class Pages
         Console.Clear();
     }
     
-    public static int BunkerManager()
+    public static void BunkerManager()
     {
         while (true)
         {
@@ -31,7 +31,7 @@ public static class Pages
             if (inputInt == 1) OpenBunker();
             if (inputInt == 2) CreateBunker();
             if (inputInt == 3) DeleteBunker();
-            if (inputInt == 4) DisplayLogo(); return 0;
+            if (inputInt == 4) { DisplayLogo(); break; }
         }
     }
 
@@ -49,7 +49,7 @@ public static class Pages
         while (true)
         {
             Interface.Center("C R E A T E : B U N K E R", ':');
-            Console.Write("Name: ");
+            Console.Write("Bunker name: ");
             string directory = Console.ReadLine()!;
 
             if (Directory.Exists(Environment.CurrentDirectory + @"\" + directory))
@@ -66,7 +66,7 @@ public static class Pages
         while (true)
         {
             Interface.Center("D E L E T E : B U N K E R", ':');
-            Console.Write("Insert the name of the bunker you want to delete: ");
+            Console.Write("Bunker name: ");
             string directory = Console.ReadLine()!;
             
             FileHandler.DeleteDirectory(directory); break;
@@ -75,11 +75,13 @@ public static class Pages
 
     private static int FileManager(string directory)
     {
+        bool run = true;
         while (true)
         {
             Console.Clear();
             Interface.Center("F I L E : M A N A G E R", ':');
-            FileHandler.OpenDirectory(directory);
+            if (run) { FileHandler.OpenDirectory(directory); run = false; }
+            else FileHandler.OpenDirectory();
             Interface.Center("| 1 : Open file | 2 : Create file | 3 : Delete file | 4 : Exit |", ':');
 
             int[] options = { 1, 2, 3, 4 };
@@ -88,7 +90,7 @@ public static class Pages
             if (inputInt == 1) OpenFile();
             if (inputInt == 2) CreateFile();
             if (inputInt == 3) DeleteFile();
-            if (inputInt == 4) return 0;
+            if (inputInt == 4) { Environment.CurrentDirectory = Program.Root(); return 0; }
         }
     }
 
@@ -99,7 +101,14 @@ public static class Pages
 
     private static void CreateFile()
     {
+        Console.Clear();
+        Interface.Center("C R E A T E : F I L E", ':');
+        Console.Write("File name: ");
+        string fileName = Console.ReadLine()!;
+        Console.Write("File extension (default = txt): ");
+        string fileExtension = Console.ReadLine()!;
         
+        FileHandler.CreateFile(fileName, fileExtension);
     }
 
     private static void DeleteFile()
