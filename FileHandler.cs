@@ -6,15 +6,16 @@ public static class FileHandler
     
     public static void OpenDirectory(string directory = "")
     {
-        string[] files = Directory.GetFileSystemEntries(Environment.CurrentDirectory + @"\" + directory);
-                   
+        Environment.CurrentDirectory = Environment.CurrentDirectory + @"\" + directory;
+        string[] files = Directory.GetFileSystemEntries(Environment.CurrentDirectory);
+        
         if (files.Length == 0)
         {
-            Console.WriteLine(); Interface.Center("You don't have any bunkers yet.", ' '); Console.WriteLine();
+            Console.WriteLine(); Interface.Center("You don't have any bunkers yet."); Console.WriteLine();
         }
 
         int initialIndex = Environment.CurrentDirectory.Length + 1;
-        if (directory != "") initialIndex += directory.Length + 1;  
+          
         foreach (string file in files)
         {
             Console.WriteLine(file[(initialIndex)..]);
@@ -28,7 +29,7 @@ public static class FileHandler
             Directory.CreateDirectory(Environment.CurrentDirectory + @"\" + directory);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine();
-            Interface.Center("Bunker created!", ' ');
+            Interface.Center("Bunker created!");
             Console.WriteLine();
             Thread.Sleep(Delay);
             Console.ResetColor();
@@ -58,7 +59,7 @@ public static class FileHandler
             Directory.Delete(Environment.CurrentDirectory + @"\" + directory);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine();
-            Interface.Center("Bunker deleted!", ' ');
+            Interface.Center("Bunker deleted!");
             Console.WriteLine();
             Thread.Sleep(Delay);
             Console.ResetColor();
@@ -72,18 +73,38 @@ public static class FileHandler
             Interface.Error("Bunker name cannot be null!");
         }
     }
-
-    public static void CreateFile()
-    {
-        
-    }
-
+    
     public static void OpenFile()
     {
         
     }
 
-    public static void DeleteFile()
+    public static void CreateFile(string fileName, string fileExtension = "txt")
+    {
+        if (fileExtension.Contains('.'))
+        {
+            fileExtension = fileExtension.Remove(0, 1);
+        }
+        
+        string filePath = Environment.CurrentDirectory + @"\" + fileName + "." + fileExtension;
+        
+        try
+        {
+            File.Create(filePath);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine();
+            Interface.Center("File created!");
+            Console.WriteLine();
+            Thread.Sleep(Delay);
+            Console.ResetColor();
+        }
+        catch (IOException)
+        {
+            Interface.Error("Something went wrong!");
+        }
+    }
+    
+    public static void DeleteFile(string fileName)
     {
         
     }
