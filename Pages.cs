@@ -108,7 +108,11 @@ public static class Pages
 
     private static void OpenFile()
     {
+        Interface.Center("O P E N : F I L E", ':');
+        Console.Write("File name: ");
+        string fileName = Console.ReadLine()!;
         
+        FileHandler.OpenFile(fileName);
     }
 
     private static void CreateFile()

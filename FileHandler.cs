@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using CliWrap;
+
 namespace BlackRock;
 
 public static class FileHandler
@@ -16,12 +19,16 @@ public static class FileHandler
                 : "You don't have any files yet.");
             Console.WriteLine();
         }
-        
-        int initialIndex = Environment.CurrentDirectory.Length + 1;
-          
-        foreach (string file in files)
+        else 
         {
-            Console.WriteLine(file[(initialIndex)..]);
+            int initialIndex = Environment.CurrentDirectory.Length + 1;
+            
+            Console.WriteLine();
+            foreach (string file in files)
+            {
+                Console.WriteLine(file[(initialIndex)..]);
+            }
+            Console.WriteLine();
         }
     }
 
@@ -67,19 +74,44 @@ public static class FileHandler
         }
     }
     
-    public static void OpenFile()
+    public static void OpenFile(string fileName="")
     {
-        
+        if (fileName != "")
+        {
+            try
+            {
+                Cli.Wrap("code").WithArguments(@".\" + fileName).ExecuteAsync();
+            }
+            catch (Exception)
+            {
+                Interface.Error("Something went wrong while trying to open the file!");
+            }
+        }
+        else
+        {
+            Interface.Error("File name cannot be blank!");
+        }
     }
 
-    public static void CreateFile(string fileName, string fileExtension = "txt")
+    public static void CreateFile(string fileName, string fileExtension = "")
     {
+        string filePath; 
+            
         if (fileExtension.Contains('.'))
         {
             fileExtension = fileExtension.Remove(0, 1);
         }
+
+        if (fileExtension == "")
+        {
+            filePath = Environment.CurrentDirectory + @"\" + fileName + ".txt";
+        }
+        else
+        {
+            filePath = Environment.CurrentDirectory + @"\" + fileName + "." + fileExtension;
+        }
         
-        string filePath = Environment.CurrentDirectory + @"\" + fileName + "." + fileExtension;
+        Console.WriteLine(filePath); Thread.Sleep(2000);
         
         try
         {
